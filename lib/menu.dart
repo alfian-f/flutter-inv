@@ -72,8 +72,22 @@ class InvCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color cardColor;
+
+    switch (item.name) {
+      case 'Add Item':
+        cardColor = Colors.lightGreen;
+        break;
+      case 'Logout':
+        cardColor = Colors.red;
+        break;
+      default:
+        cardColor = Colors.indigo;
+        break;
+    }
+
     return Material(
-      color: Colors.indigo,
+      color: cardColor,
       child: InkWell(
         // Responsive touch area
         onTap: () {
