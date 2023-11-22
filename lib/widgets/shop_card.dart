@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inv/screens/itemlist_form.dart';
+import 'package:flutter_inv/screens/list_item.dart';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:flutter_inv/screens/login.dart';
 
 class InvItem {
   final String name;
@@ -15,6 +19,8 @@ class InvCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     Color cardColor;
 
     switch (item.name) {
@@ -33,7 +39,7 @@ class InvCard extends StatelessWidget {
       color: cardColor,
       child: InkWell(
         // Responsive touch area
-        onTap: () {
+        onTap: () async {
           // Show a SnackBar when clicked
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -46,6 +52,28 @@ class InvCard extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ShopFormPage(),
                 ));
+          } else if (item.name == "View Items") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ProductPage()));
+          } else if (item.name == "Logout") {
+            final response = await request.logout(
+                // TODO: Change the URL to your Django app's URL. Don't forget to add the trailing slash (/) if needed.
+                "https://alfian-fadhlurrahman-tugas.pbp.cs.ui.ac.id/auth/logout/");
+            String message = response["message"];
+            if (response['status']) {
+              String uname = response["username"];
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("$message Good bye, $uname."),
+              ));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("$message"),
+              ));
+            }
           }
         },
         child: Container(

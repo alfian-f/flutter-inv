@@ -171,3 +171,90 @@ I did this by using the navigator function under the `InkWell` widget in `menu.d
 Grouped the dart files into screens & widgets, leaving `main.dart` outside in `/lib`, screens folder contains dart files that creates a screen, while widgets folder contains dart files for creating widgets that can be used in multiple screen.
 
 ---
+
+## Assignment 9
+
+
+#### Can we retrieve JSON data without creating a model first? If yes, is it better than creating a model before retrieving JSON data?
+
+For smaller projects or simple use cases, retrieving JSON data without a model might be sufficient and more straightforward. However, for larger projects or situations where type safety and code maintainability are crucial, creating a model is often the recommended approach.
+
+---
+
+#### Explain the function of CookieRequest and explain why a CookieRequest instance needs to be shared with all components in a Flutter application.
+
+
+`CookieRequest` is used to manage the cookies required for authentication with the Django Project Server. Sharing a `CookieRequest` instance across all components in a Flutter application via a `Provider` is essential to ensure consistent authentication state. This approach guarantees that all components can interact with and access the same authentication state established by the `CookieRequest`.
+
+---
+
+#### Explain the mechanism of fetching data from JSON until it can be displayed on Flutter.
+
+To fetch and display data from JSON in a Flutter application, start by making an HTTP request using a package like http. Decode the received JSON data using the `dart:convert` library. Create the Dart model classes for better organization. Deserialize the JSON into Dart objects, and then use Flutter widgets like `FutureBuilder` along with UI components such as `ListView` to display the data. 
+
+---
+
+#### Explain the authentication mechanism from entering account data on Flutter to Django authentication completion and the display of menus on Flutter.
+
+  
+Upon user login in the Flutter app, an HTTP request is sent to the Django Project, containing the entered username and password. Within the Django Project, authentication involves validating these credentials against stored user data. If the credentials are confirmed, the Django app responds to the Flutter app, indicating successful or failed authentication. Subsequently, the Flutter app updates its local state and transitions to a corresponding screen based on the authentication outcome.
+
+---
+
+#### List all the widgets you used in this assignment and explain their respective functions.
+
+`login.dart` :
+
+- `Scaffold` : Provides the basic structure of the visual interface.
+- `AppBar` : App bar on top of the screen, to display a text widget 'Login'
+- `Text` : Displays text content.
+- `Container` : A box model that can contain other widgets. For customization of its child's position and appearance.
+- `Column` : A widget that arranges its children in a vertical column. 
+- `TextField` : A widget that allows the user to input text. For username and password.
+- `SizedBox` : A box with a specified size.
+- `ElevatedButton` : A material design raised button. It is used for triggering actions. In this case, it is used for logging in.
+- `SnackBar` : A small, temporary message that appears at the bottom of the screen.
+- `AlertDialog` : A dialog that interrupts the user with important information or a decision that requires their input.
+- `TextButton` : A material design text button. It can be used for actions similar to `ElevatedButton` but has a flat appearance.
+
+`list_item.dart` :
+
+- `Scaffold`: Provides the basic structure for the visual interface.
+- `AppBar`: Represents the app bar at the top of the screen.
+- `Text`: Displays text content.
+- `FutureBuilder`: A widget that makes it easy to work with futures, displaying different widgets depending on the state of the future.
+- `Center` : Centers its child within the parent widget.
+- `CircularProgressIndicator` : Displays a circular loading indicator.
+- `Column` : Arranges its children in a vertical column.
+- `SizedBox` : Creates a box of a specified size.
+- `ListView` : A scrollable list of widgets.
+- `Container` : A box that can contain other widgets, providing customization of its child's position and appearance.
+- `Align` : Aligns its child within the parent widget.
+- `Padding` : Adds padding around its child.
+- `ElevatedButton` : Represents a raised button for triggering actions.
+- `AlertDialog` : A dialog box that interrupts the user with important information or a decision that requires their input.
+- `SingleChildScrollView` : A scrollable widget that allows its single child to be scrolled. It's useful when the content may overflow the screen.
+
+---
+
+#### Explain how you implement the checklist above step by step! (not just following the tutorial).
+
+1. Django-Flutter Authentication Integration
+
+Created a `django-app` named `authentication` and install `django-cors-headers` in the django project directory. Then create a new view method for login in `authentication/views.py` and route it with the `urls.py` file.
+
+2. Integrate Authentication System in Flutter
+
+In the flutter project directory, install `provider` and `pbp_django_auth` with `flutter pub add`. Then modify the root widget to provide `CookieRequest` library to all child widgets using `Provider`. Create `login.dart` file in `lib/screens/` and fill it with a `LoginPage` class that build a widget for the Login Page Screen.
+
+3. Custom Model Creation
+
+copy the `JSON` endpoint in the django project to the [Quicktype](https://app.quicktype.io/) website. then change the setup name to `Item`, source type to `JSON`, and language to `Dart`. Then click the `Copy Code` Button add insert the code to `lib/models/Item.dart`.
+
+4. Fetch Data from Django and Show Data in the Flutter App
+
+Add the http package with `flutter pub add http`, then add `<uses-permission  android:name="android.permission.INTERNET"  />` to the `android/app/src/main/AndroidManifest.xml` file. Create a new screen called `list_item.dart` and inside that file create a new class named `ProductPage` that will build a widget for listing the user item. Then add the `ProductPage` to the left drawer widget & shop card widget.
+
+5. Implement Logout Feature
+
+Create a new logout function in `authentication/views.py`  and route it using `urls.py` then in the flutter project set request to CookieRequest in `shop_card.dart` and an if statement if the item name is "Logout", then use that request to Logout.
